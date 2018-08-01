@@ -64,7 +64,7 @@ namespace GradeBookTests
             };
 
             gradeBook.GetType().GetProperty("Students").SetValue(gradeBook, students);
-
+            
             //Test if A is given when input grade is in the top 20%.
             Assert.True((char)method.Invoke(gradeBook, new object[] { 0 }) == 'F', "`GradeBook.GradeBooks.RankedGradeBook.GetLetterGrade` didn't give an F when a student failed to earn a higher grade.");
 
