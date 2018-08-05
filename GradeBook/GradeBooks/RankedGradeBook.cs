@@ -6,8 +6,8 @@
     public class RankedGradeBook : BaseGradeBook
     {
         /// <inheritdoc />
-        public RankedGradeBook(string name)
-            : base(name)
+        public RankedGradeBook(string name, bool isWeighted)
+            : base(name, isWeighted)
         {
             Type = Enums.GradeBookType.Ranked;
         }
