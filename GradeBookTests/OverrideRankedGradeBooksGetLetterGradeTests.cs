@@ -273,6 +273,59 @@ namespace GradeBookTests
         /// <summary>
         ///   All tests related to the "Fourth 20 Percent Get A D" task.
         /// </summary>
+        [Fact(DisplayName = "Fourth 20 Percent Get An E @override-getlettergrade-e")]
+        public void FifthTwentyPercentGetAnETests()
+        {
+            // Setup Test
+            var rankedGradeBook = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                                   from type in assembly.GetTypes()
+                                   where type.Name == "RankedGradeBook"
+                                   select type).FirstOrDefault();
+
+            var constructor = rankedGradeBook.GetConstructors().FirstOrDefault();
+            var parameters = constructor.GetParameters();
+            object gradeBook = null;
+            if (parameters.Count() == 2 && parameters[0].ParameterType == typeof(string) && parameters[1].ParameterType == typeof(bool))
+                gradeBook = Activator.CreateInstance(rankedGradeBook, "Test GradeBook", true);
+            else if (parameters.Count() == 1 && parameters[0].ParameterType == typeof(string))
+                gradeBook = Activator.CreateInstance(rankedGradeBook, "Test GradeBook");
+
+            MethodInfo method = rankedGradeBook.GetMethod("GetLetterGrade");
+
+            //Setup successful conditions
+            var students = new List<Student>
+            {
+                new Student("jamie",StudentType.Standard,EnrollmentType.Campus)
+                {
+                    Grades = new List<double>{ 100 }
+                },
+                new Student("john",StudentType.Standard,EnrollmentType.Campus)
+                {
+                    Grades = new List<double>{ 75 }
+                },
+                new Student("jackie",StudentType.Standard,EnrollmentType.Campus)
+                {
+                    Grades = new List<double>{ 50 }
+                },
+                new Student("tom",StudentType.Standard,EnrollmentType.Campus)
+                {
+                    Grades = new List<double>{ 25 }
+                },
+                new Student("tony",StudentType.Standard,EnrollmentType.Campus)
+                {
+                    Grades = new List<double>{ 5 }
+                }
+            };
+
+            gradeBook.GetType().GetProperty("Students").SetValue(gradeBook, students);
+
+            //Test if E is given when input grade is between the top 80 and 100%.
+            Assert.True((char)method.Invoke(gradeBook, new object[] { 5 }) == 'E', "`GradeBook.GradeBooks.RankedGradeBook.GetLetterGrade` didn't give an D to students between the top 60 and 80% of the class.");
+        }
+
+                /// <summary>
+        ///   All tests related to the "Fourth 20 Percent Get A D" task.
+        /// </summary>
         [Fact(DisplayName = "Fourth 20 Percent Get An D @override-getlettergrade-d")]
         public void FourthTwentyPercentGetADTests()
         {
