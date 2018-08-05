@@ -14,7 +14,7 @@
 
         public override char GetLetterGrade(double averageGrade)
         {
-            if ( this.Students == null || this.Students.Count < 5)
+            if ( NotEnoughStudents())
                 throw new InvalidOperationException();
             if (averageGrade == 0)
                 return 'F';
@@ -24,6 +24,32 @@
             return (char)((int)'A' + position);
         }
 
+        private bool NotEnoughStudents()
+        {
+            return this.Students == null || this.Students.Count < 5;
+        }
 
+        public override void CalculateStatistics()
+        {
+            if (NotEnoughStudents())
+            {
+                Console.WriteLine(
+                    "Ranked grading requires at least 5 students with grades in order to properly calculate a student's overall grade.");
+                return;
+            }
+
+            base.CalculateStatistics();
+        }
+
+        public override void CalculateStudentStatistics(string name)
+        {
+            if (NotEnoughStudents())
+            {
+                Console.WriteLine(
+                    "Ranked grading requires at least 5 students with grades in order to properly calculate a student's overall grade.");
+                return;
+            }
+            base.CalculateStudentStatistics(name);
+        }
     }
 }
